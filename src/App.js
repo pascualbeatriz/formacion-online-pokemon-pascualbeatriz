@@ -7,12 +7,21 @@ class App extends React.Component {
 
     this.state = {
       pokemons:[],
-      pokemonInf:[]
+      query:''
     };
+    this.getUserquery =  this.getUserquery.bind(this);
   }
 
   componentDidMount(){
     this.getPokemons();
+  }
+
+  getUserquery(event){
+    const gapText = event.currentTarget.value;
+
+    this.setState({
+      query:gapText
+    })
   }
 
   getPokemons(){
@@ -63,20 +72,27 @@ class App extends React.Component {
 
   render() {
     console.log('me estoy pintando');
-    const {pokemons} = this.state;
+    const {pokemons,query} = this.state;
       return (
         <div className="App">
+          <label htmlFor="intro__name" className="filter_name"> 
+            <input type="text" className="intro__name" onChange={this.getUserquery} value={query}/>
+          </label>     
         <ul className="pokemon__list">
         {pokemons
+          .filter(pokeName =>(pokeName.name.toUpperCase().includes(query.toUpperCase()))
+
+          )
           .map(pokemon =>(
             <li className="pokemon__item" key={pokemon.id}>
-              <p className="poke__name">{pokemon.name}</p>
-              <img src={pokemon.image} alt={pokemon.name} className="poke__img"/>
-              <p className="poke__name">{`${pokemon.types[0]} ${pokemon.types[1]}`}</p>
+              <div className="container__pokemon">
+                <p className="poke__name">{pokemon.name}</p>
+                <img src={pokemon.image} alt={pokemon.name} className="poke__img"/>
+                <p className="poke__name">{`${pokemon.types[0]} ${pokemon.types[1]}`}</p>
+              </div>
             </li>
           ))
         }
-          
           
         </ul>
         </div>
