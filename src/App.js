@@ -1,5 +1,9 @@
 import React from 'react';
+import {getDataApi} from './services/Fetch';
+import ListPokemons from './components/ListPokemons';
+import Filters from './components/Filters';
 import './App.css';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -25,10 +29,7 @@ class App extends React.Component {
   }
 
   getPokemons(){
-    const getUrl= "https://pokeapi.co/api/v2/pokemon?limit=25";
-
-    fetch(getUrl)
-      .then(response => response.json())
+    getDataApi()
         .then(data => {
            for(let pokemonList of data.results)
     fetch(pokemonList.url)
@@ -71,30 +72,22 @@ class App extends React.Component {
 
 
   render() {
-    console.log('me estoy pintando');
     const {pokemons,query} = this.state;
       return (
         <div className="App">
-          <label htmlFor="intro__name" className="filter_name"> 
-            <input type="text" className="intro__name" onChange={this.getUserquery} value={query}/>
-          </label>     
-        <ul className="pokemon__list">
-        {pokemons
-          .filter(pokeName =>(pokeName.name.toUpperCase().includes(query.toUpperCase()))
-
-          )
-          .map(pokemon =>(
-            <li className="pokemon__item" key={pokemon.id}>
-              <div className="container__pokemon">
-                <p className="poke__name">{pokemon.name}</p>
-                <img src={pokemon.image} alt={pokemon.name} className="poke__img"/>
-                <p className="poke__name">{`${pokemon.types[0]} ${pokemon.types[1]}`}</p>
-              </div>
-            </li>
-          ))
-        }
-          
-        </ul>
+          <header className="header">
+            <h1 className="app__title">Título app Pokemon</h1>
+          </header>
+          <Filters
+          getUserquery = {this.getUserquery}
+          query = {query}
+          />
+             
+          <ListPokemons
+          pokemons = {pokemons}
+          query = {query}
+          />
+      
         </div>
       );
     }
