@@ -35,7 +35,7 @@ class App extends React.Component {
     fetch(pokemonList.url)
       .then(response => response.json())
         .then(pokemonData => { 
-          console.log(pokemonData);
+          // console.log(pokemonData);
           const arrTypes = [];
             for(let pokemonType of pokemonData.types){
               arrTypes.push(pokemonType.type.name)
