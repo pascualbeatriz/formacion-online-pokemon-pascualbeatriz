@@ -1,5 +1,5 @@
 import React from 'react';
-import {getDataApi} from './services/Fetch';
+import {getDataApi, getDataEvolution} from './services/Fetch';
 import ListPokemons from './components/ListPokemons';
 import Filters from './components/Filters';
 import './App.css';
@@ -11,6 +11,7 @@ class App extends React.Component {
 
     this.state = {
       pokemons:[],
+      pokemonEvolution:[],
       query:''
     };
     this.getUserquery =  this.getUserquery.bind(this);
@@ -18,6 +19,7 @@ class App extends React.Component {
 
   componentDidMount(){
     this.getPokemons();
+    this.getEvol();
   }
 
   getUserquery(event){
@@ -30,8 +32,8 @@ class App extends React.Component {
 
   getPokemons(){
     getDataApi()
-        .then(data => {
-           for(let pokemonList of data.results)
+      .then(data => {
+        for(let pokemonList of data.results)
     fetch(pokemonList.url)
       .then(response => response.json())
         .then(pokemonData => { 
@@ -67,6 +69,22 @@ class App extends React.Component {
 
         })  
     });
+  }
+
+  getEvol (){
+    getDataEvolution()
+    .then(dataEvolutionPoke => {
+      console.log(dataEvolutionPoke);
+      for(let evolution of dataEvolutionPoke.results)
+      fetch(evolution.url)
+        .then(responseEvolPoke => responseEvolPoke.json())
+          .then(evolData =>{
+            console.log(evolData);
+            const pokemonEvolution = {
+              
+            }
+          })
+    })
   }
  
 
