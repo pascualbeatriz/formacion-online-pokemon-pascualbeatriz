@@ -80,9 +80,16 @@ class App extends React.Component {
         .then(responseEvolPoke => responseEvolPoke.json())
           .then(evolData =>{
             console.log(evolData);
-            const pokemonEvolution = {
-              
-            }
+            const pokemonEvolutionData = {
+              id: evolData.id,
+              name: evolData.chain.species.name,
+              evolutionOne: evolData.chain.evolves_to[0].species.name,
+              // evolutionTwo: evolData.chain.evolves_to[0].evolves_to[0].species.name
+            };
+
+            this.setState({
+              pokemonEvolution:[...this.state.pokemonEvolution, pokemonEvolutionData]
+            });   
           })
     })
   }
