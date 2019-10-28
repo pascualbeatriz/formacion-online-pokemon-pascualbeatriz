@@ -1,7 +1,8 @@
 import React from 'react';
 import {getDataApi, getDataEvolution} from './services/Fetch';
-import ListPokemons from './components/ListPokemons';
-import Filters from './components/Filters';
+import {Switch, Route} from 'react-router-dom';
+import Home from './components/Home';
+import PokeDetail from './components/PokeDetail';
 import './App.css';
 
 
@@ -53,19 +54,6 @@ class App extends React.Component {
           this.setState({
             pokemons: [...this.state.pokemons, pokemonInf]
           });            
-            //   function getName(pokemonType, name){
-            //     let getPokemonType= pokemonData.types;
-            //     if (pokemonType.indexOf(name)===-1){
-            //       arrTypes.push(name);
-            //       console.log('El pokemon es: ' + name);
-            //     } else if (pokemonType.indexOf(name) > -1){
-            //       console.log(name + ' ya existe este pokemon');
-            //     }
-            //   };
-            // let pokemonType = [];
-            // getName(pokemonType,'name');
-            // getName(pokemonType,'name');
-
 
         })  
     });
@@ -74,21 +62,22 @@ class App extends React.Component {
   getEvol (){
     getDataEvolution()
     .then(dataEvolutionPoke => {
-      console.log(dataEvolutionPoke);
       for(let evolution of dataEvolutionPoke.results)
       fetch(evolution.url)
         .then(responseEvolPoke => responseEvolPoke.json())
           .then(evolData =>{
-            console.log(evolData);
             const pokemonEvolutionData = {
               id: evolData.id,
               name: evolData.chain.species.name,
               evolutionOne: evolData.chain.evolves_to[0].species.name,
               // evolutionTwo: evolData.chain.evolves_to[0].evolves_to[0].species.name
             };
+            // const newId = evolData.map((item,index) => {
+            //   return {...item, id:index};
+            // });
 
             this.setState({
-              pokemonEvolution:[...this.state.pokemonEvolution, pokemonEvolutionData]
+              pokemonEvolution: pokemonEvolutionData
             });   
           })
     })
@@ -97,22 +86,36 @@ class App extends React.Component {
 
 
   render() {
-    const {pokemons,query} = this.state;
+    const {pokemons,query, pokemonEvolution} = this.state;
+    console.log(pokemonEvolution);
       return (
         <div className="App">
           <header className="header">
             <h1 className="app__title">Título app Pokemon</h1>
           </header>
-          <Filters
-          getUserquery = {this.getUserquery}
-          query = {query}
-          />
-             
-          <ListPokemons
-          pokemons = {pokemons}
-          query = {query}
-          />
-      
+          <Switch>
+            <Route exact path="/" render = { () => {
+              return (
+                <Home 
+                  getUserquery = {this.getUserquery}
+                  query = {query}
+                  pokemons = {pokemons}
+                  pokemonEvolution = {pokemonEvolution}
+                />
+                );
+              }}
+            />
+            <Route path="/poke-detail/:id" render = {(routerProps) => {
+              return (
+                <PokeDetail
+                routerProps = {routerProps}
+                pokemons = {pokemons}
+                pokemonEvolution = {pokemonEvolution}
+                />
+              );
+            }}
+            />
+          </Switch>
         </div>
       );
     }
