@@ -66,6 +66,7 @@ class App extends React.Component {
       fetch(evolution.url)
         .then(responseEvolPoke => responseEvolPoke.json())
           .then(evolData =>{
+
             const pokemonEvolutionData = {
               id: evolData.id,
               name: evolData.chain.species.name,
@@ -108,6 +109,7 @@ class App extends React.Component {
             <Route path="/poke-detail/:id" render = {(routerProps) => {
               return (
                 <PokeDetail
+             
                 routerProps = {routerProps}
                 pokemons = {pokemons}
                 pokemonEvolution = {pokemonEvolution}

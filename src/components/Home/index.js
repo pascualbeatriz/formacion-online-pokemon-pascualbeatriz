@@ -6,6 +6,7 @@ const Home = props => {
   const {pokemons,query,getUserquery} = props;
     return (
       <Fragment>
+     
         <Filters
           getUserquery = {getUserquery}
           query = {query}
